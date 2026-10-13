@@ -10,11 +10,17 @@ All patients presenting to an emergency department require prompt evaluation by 
 """
 
 import os
+import sys
 import json
 import uuid
 from pathlib import Path
 from datetime import datetime, timezone
 from typing import List, Optional, Dict, Any
+
+# Ensure backend directory is in sys.path so 'uvicorn backend.main:app' works from any working directory
+BACKEND_DIR = Path(__file__).resolve().parent
+if str(BACKEND_DIR) not in sys.path:
+    sys.path.insert(0, str(BACKEND_DIR))
 
 from fastapi import FastAPI, HTTPException, Query, status
 from fastapi.middleware.cors import CORSMiddleware
