@@ -1,0 +1,49 @@
+{
+  "system_name": "ER TRIAGE ASSISTANT - Python Demonstration Scoring Weight Configuration",
+  "formula_description": "Demonstrative Weighted Acuity Score = Sum(Component_Normalized_Deviations * Weight) / Sum(Present_Weights) * 100. Range: [0, 100]. If a Red warning rule is active, priority remains Level 1 irrespective of score.",
+  "vital_sign_weights": {
+    "oxygen_saturation": {
+      "weight": 0.28,
+      "optimal_range": [95.0, 100.0],
+      "critical_low": 90.0,
+      "unit": "%"
+    },
+    "heart_rate": {
+      "weight": 0.22,
+      "optimal_range": [60.0, 100.0],
+      "critical_low": 45.0,
+      "critical_high": 140.0,
+      "unit": "bpm"
+    },
+    "systolic_blood_pressure": {
+      "weight": 0.20,
+      "optimal_range": [100.0, 130.0],
+      "critical_low": 85.0,
+      "critical_high": 190.0,
+      "unit": "mmHg"
+    },
+    "respiratory_rate": {
+      "weight": 0.18,
+      "optimal_range": [12.0, 20.0],
+      "critical_low": 8.0,
+      "critical_high": 32.0,
+      "unit": "breaths/min"
+    },
+    "temperature": {
+      "weight": 0.12,
+      "optimal_range": [36.5, 37.5],
+      "critical_low": 35.0,
+      "critical_high": 39.5,
+      "unit": "°C"
+    }
+  },
+  "symptom_severity_weights": {
+    "high_risk_symptom_multiplier": 15.0,
+    "medium_risk_symptom_multiplier": 8.0,
+    "low_risk_symptom_multiplier": 3.0
+  },
+  "missing_data_penalty": {
+    "enable_caution_flag": true,
+    "message": "Vital signs are incomplete. Severity score is normalized exclusively over verified present metrics and must be reviewed cautiously by clinical staff."
+  }
+}

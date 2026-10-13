@@ -1,0 +1,133 @@
+{
+  "system_name": "ER TRIAGE ASSISTANT - DMGT Demonstration Severity Rule Engine",
+  "version": "1.0.0",
+  "disclaimer": "EDUCATIONAL PROTOTYPE ONLY: These logical IF/THEN demonstration rules are designed solely for educational showcase (DMGT / ADSA coursework). They do NOT constitute medical advice, diagnosis, or clinical triage protocols. Real medical triage requires licensed clinical professionals (e.g., ESI, MTS, CTAS protocols).",
+  "priority_categories": {
+    "LEVEL_1_RESUSCITATION": {
+      "level": 1,
+      "name": "Level 1 - Immediate / Resuscitation",
+      "code": "RED",
+      "color_hex": "#DC2626",
+      "badge_class": "bg-red-100 text-red-800 border-red-300",
+      "max_wait_minutes": 0,
+      "clinical_urgency": "Requires immediate medical attention; life-threatening situation."
+    },
+    "LEVEL_2_EMERGENT": {
+      "level": 2,
+      "name": "Level 2 - Emergent / Very Urgent",
+      "code": "ORANGE",
+      "color_hex": "#EA580C",
+      "badge_class": "bg-orange-100 text-orange-800 border-orange-300",
+      "max_wait_minutes": 15,
+      "clinical_urgency": "High concern condition; assessment recommended within 15 minutes."
+    },
+    "LEVEL_3_URGENT": {
+      "level": 3,
+      "name": "Level 3 - Urgent",
+      "code": "YELLOW",
+      "color_hex": "#D97706",
+      "badge_class": "bg-amber-100 text-amber-800 border-amber-300",
+      "max_wait_minutes": 60,
+      "clinical_urgency": "Potentially serious; requires evaluation within 60 minutes."
+    },
+    "LEVEL_4_SEMI_URGENT": {
+      "level": 4,
+      "name": "Level 4 - Less Urgent / Non-Emergency",
+      "code": "GREEN",
+      "color_hex": "#16A34A",
+      "badge_class": "bg-emerald-100 text-emerald-800 border-emerald-300",
+      "max_wait_minutes": 120,
+      "clinical_urgency": "Routine condition; stable for non-urgent evaluation."
+    }
+  },
+  "emergency_warning_rules": [
+    {
+      "id": "RULE_CRITICAL_HYPOXIA",
+      "priority": "LEVEL_1_RESUSCITATION",
+      "condition_name": "Critical Hypoxemia (Oxygen Saturation < 90%)",
+      "criteria": {
+        "vitals.oxygen_saturation_max": 89.9
+      },
+      "symptom_keywords": ["unresponsive", "cannot breathe", "cyanosis", "respiratory arrest"],
+      "explanation": "Recorded oxygen saturation (SpO2) is dangerously low (< 90%), indicating potential respiratory failure requiring immediate airway and oxygenation evaluation."
+    },
+    {
+      "id": "RULE_SEVERE_CARDIAC_SYMPTOMS",
+      "priority": "LEVEL_1_RESUSCITATION",
+      "condition_name": "Acute Cardiac Alarm / Crushing Chest Pain with Collapse",
+      "symptom_keywords": ["crushing chest pain", "cardiac arrest", "unconscious", "collapse", "severe radiating chest pain", "profuse diaphoresis with chest pressure"],
+      "explanation": "Presence of acute crushing chest pain or unconsciousness flags suspected acute coronary syndrome or circulatory collapse, demanding immediate resuscitation bay assessment."
+    },
+    {
+      "id": "RULE_SEVERE_HEMODYNAMIC_INSTABILITY",
+      "priority": "LEVEL_1_RESUSCITATION",
+      "condition_name": "Severe Hemodynamic Collapse (SBP < 80 mmHg or HR > 150 bpm / < 40 bpm)",
+      "criteria": {
+        "vitals.systolic_bp_max": 79.9,
+        "vitals.heart_rate_max_or_min": {"min": 39.9, "max": 150.1}
+      },
+      "explanation": "Severe hemodynamic instability detected (systolic blood pressure < 80 mmHg or severe brady/tachycardia), indicative of decompensated shock."
+    }
+  ],
+  "high_concern_rules": [
+    {
+      "id": "RULE_MODERATE_HYPOXIA_RESPIRATORY",
+      "priority": "LEVEL_2_EMERGENT",
+      "condition_name": "Moderate Hypoxemia (SpO2 90% - 93%) or Stridor",
+      "criteria": {
+        "vitals.oxygen_saturation_range": [90.0, 93.9]
+      },
+      "symptom_keywords": ["shortness of breath", "stridor", "severe wheezing", "gasping", "asthma attack"],
+      "explanation": "Sub-optimal oxygen saturation (90-93%) or acute respiratory difficulty present. Patient requires urgent respiratory stabilization within 15 minutes."
+    },
+    {
+      "id": "RULE_HYPERPYREXIA_WITH_LETHARGY",
+      "priority": "LEVEL_2_EMERGENT",
+      "condition_name": "Hyperpyrexia (> 39.5°C / 103.1°F) or Sepsis Warning",
+      "criteria": {
+        "vitals.temperature_min": 39.5
+      },
+      "symptom_keywords": ["rigors", "lethargy", "confusion", "stiff neck", "petechiae"],
+      "explanation": "High fever exceeding 39.5°C accompanied by systemic signs such as confusion or lethargy flags possible severe bacteremia or central nervous system infection."
+    },
+    {
+      "id": "RULE_ACUTE_SEVERE_ABDOMINAL_PAIN",
+      "priority": "LEVEL_2_EMERGENT",
+      "condition_name": "Acute Severe Abdomen or Suspected Internal Hemorrhage",
+      "symptom_keywords": ["acute severe abdominal pain", "rigid abdomen", "hematemesis", "vomiting blood", "melena"],
+      "explanation": "Severe acute peritoneal signs or gastrointestinal bleeding warrant emergent surgical evaluation."
+    },
+    {
+      "id": "RULE_NEUROLOGICAL_DEFICIT",
+      "priority": "LEVEL_2_EMERGENT",
+      "condition_name": "Acute Neurological Deficit / Stroke Warning (FAST)",
+      "symptom_keywords": ["facial droop", "slurred speech", "arm weakness", "hemiplegia", "sudden numbness", "acute aphasia"],
+      "explanation": "Acute focal neurological symptoms strongly suggest time-critical cerebrovascular incident (stroke protocol activation)."
+    }
+  ],
+  "moderate_concern_rules": [
+    {
+      "id": "RULE_MODERATE_FEVER_VOMITING",
+      "priority": "LEVEL_3_URGENT",
+      "condition_name": "Persistent Moderate Pyrexia or Dehydration Risk",
+      "criteria": {
+        "vitals.temperature_range": [38.2, 39.4]
+      },
+      "symptom_keywords": ["fever", "persistent vomiting", "moderate pain", "diarrhea", "migraine", "asthma flare"],
+      "explanation": "Elevated body temperature (38.2 - 39.4°C) or moderate symptom severity requires diagnostic evaluation and symptomatic relief within 60 minutes."
+    },
+    {
+      "id": "RULE_FRACTURE_LACERATION_BLEEDING",
+      "priority": "LEVEL_3_URGENT",
+      "condition_name": "Suspected Closed Fracture or Deep Laceration",
+      "symptom_keywords": ["deep laceration", "suspected fracture", "inability to bear weight", "deformity", "continuous moderate bleeding"],
+      "explanation": "Orthopedic trauma or wound requiring x-ray evaluation, hemostasis, or wound closure within 1 hour."
+    }
+  ],
+  "default_rule": {
+    "id": "RULE_NON_URGENT_ROUTINE",
+    "priority": "LEVEL_4_SEMI_URGENT",
+    "condition_name": "Non-Urgent Routine Presentation",
+    "explanation": "Vital parameters are within demonstrative normal limits and symptoms represent low-acuity complaints suitable for standard ambulatory clinic or queue."
+  }
+}
