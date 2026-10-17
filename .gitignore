@@ -11,8 +11,6 @@ env/
 .pytest_cache/
 
 # Java
-java-module/bin/
-*.class
 *.jar
 
 # Node / React

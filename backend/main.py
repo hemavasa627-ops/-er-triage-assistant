@@ -17,10 +17,12 @@ from pathlib import Path
 from datetime import datetime, timezone
 from typing import List, Optional, Dict, Any
 
-# Ensure backend directory is in sys.path so 'uvicorn backend.main:app' works from any working directory
+# Ensure both project root and backend directory are in sys.path
+ROOT_DIR = Path(__file__).resolve().parent.parent
 BACKEND_DIR = Path(__file__).resolve().parent
-if str(BACKEND_DIR) not in sys.path:
-    sys.path.insert(0, str(BACKEND_DIR))
+for p in (str(ROOT_DIR), str(BACKEND_DIR)):
+    if p not in sys.path:
+        sys.path.insert(0, p)
 
 from fastapi import FastAPI, HTTPException, Query, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -737,4 +739,4 @@ if FRONTEND_DIST.exists():
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 8000))
-    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
+    uvicorn.run(app, host="0.0.0.0", port=port)
